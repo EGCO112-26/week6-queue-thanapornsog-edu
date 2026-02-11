@@ -1,3 +1,8 @@
+#include "Node.h"
+
+#ifndef Queue_h
+#define Queue_h
+
 typedef struct {
     NodePtr headPtr, tailPtr;
     int size;
@@ -9,7 +14,7 @@ void enqueue_struct(Queue* q, int x){
         new_node->data = x;
         new_node->nextPtr = NULL;
         
-        /* Finish enqueue */
+        // ถ้า size เป็น 0 หรือ head เป็น NULL คือคิวว่าง
         if(q->size == 0) 
             q->headPtr = new_node;
         else 
@@ -18,19 +23,20 @@ void enqueue_struct(Queue* q, int x){
         q->tailPtr = new_node;
         q->size++;
     }
-} // <--- เดิมคุณลืมปิดวงเล็บปีกกาตรงนี้
+}
 
 int dequeue_struct(Queue *q){
     NodePtr t = q->headPtr;
+    
     if(t){
         int value = t->data;
         
-        /* Finish dequeue */
-        q->headPtr = q->headPtr->nextPtr; // ขยับหัวแถว
+        // 1. ขยับหัวแถว
+        q->headPtr = t->nextPtr;
         
-        // แก้ไขจุดที่ผิด: ถ้าเดิมมี 1 ตัว (size==1) เอาออกแล้วต้องเซ็ต tail เป็น NULL
-        if(q->size == 1) 
-            q->tailPtr = NULL; 
+        // 2. ถ้าเหลือ 1 ตัวแล้วเอาออก (size==1) ต้องเคลียร์ tail
+        if(q->size == 1)
+            q->tailPtr = NULL;
             
         q->size--;
         free(t);
@@ -41,3 +47,5 @@ int dequeue_struct(Queue *q){
     printf("Empty queue\n");
     return 0;
 }
+
+#endif
