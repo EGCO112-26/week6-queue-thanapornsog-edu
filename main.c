@@ -5,28 +5,76 @@
 #include "Queue.h"
 
 int main(int argc, char **argv) {
-    
     Queue q;
     q.headPtr = NULL;
     q.tailPtr = NULL;
     q.size = 0;
 
-    int i, x;
+    int i;
+    int customer_no = 1;
 
-    for(i = 1; i < argc; i++){
-        if(strcmp(argv[i], "x") == 0){
-            // เรียก Dequeue
-            x = dequeue_struct(&q);
+    for (i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "x") == 0) {
+            int order_num, qty;
             
-            // ถ้าไม่ใช่ 0 แสดงว่ามีของออกมา (ถ้า 0 คือ Empty queue ปริ้นไปแล้ว)
-            if(x != 0) {
-                 printf("dequeing %d\n", x); // <--- แก้เป็นตัวเล็กตามที่คุณเคยใช้
+            if (dequeue_struct(&q, &order_num, &qty)) {
+                printf("Customer no: %d\n", customer_no++);
+                
+                int price = 0;
+                if (order_num == 1) {
+                    printf("Ramen\n");
+                    price = 100 * qty;
+                } else if (order_num == 2) {
+                    printf("Somtum\n"); 
+                    price = 60 * qty;
+                } else if (order_num == 3) {
+                    printf("Fried Chicken\n");
+                    price = 50 * qty;
+                } else {
+                    printf("Unknown item\n");
+                    price = 0;
+                }
+
+                printf("You have to pay %d\n", price);
+                
+                int cash = 0;
+                printf(":Cash:");
+                scanf("%d", &cash);
+                
+                while (cash < price) {
+                    printf("Cash:");
+                    scanf("%d", &cash);
+                }
+                
+                printf("Thank you\n");
+                
+                if (cash > price) {
+                    printf("Change is:%d\n", cash - price);
+                }
+                
+            } else {
+                printf("Empty queue\n");
+            }
+        } else {
+            if (i + 1 < argc) {
+                int order_num = atoi(argv[i]);
+                int qty = atoi(argv[i+1]);
+                
+                printf("My order is %d\n", order_num);
+                enqueue_struct(&q, order_num, qty);
+                
+                i++; 
             }
         }
-        else {
-            // เรียก Enqueue (ห้ามปริ้นอะไรออกมาตรงนี้ ถ้าโจทย์ไม่สั่ง)
-            enqueue_struct(&q, atoi(argv[i]));
-        }
     }
+
+    printf("=========================================\n");
+    printf("There are %d ppl left in the queue\n", q.size);
+
+    int temp_order, temp_qty;
+    while (q.size > 0) {
+        dequeue_struct(&q, &temp_order, &temp_qty);
+    }
+
     return 0;
 }
