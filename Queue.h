@@ -3,25 +3,25 @@
 #include "Node.h"
 #include <stdlib.h>
 
-typedef struct {
-    NodePtr headPtr, tailPtr;
+typedef struct Queue {
+    order *head, *tail;
     int size;
 } Queue;
 
 void enqueue_struct(Queue* q, int order_number, int qty) {
-    NodePtr new_node = (NodePtr)malloc(sizeof(OrderNode));
+    order* new_node = (order*)malloc(sizeof(order));
     if (new_node) {
         new_node->order_number = order_number;
         new_node->q = qty;
-        new_node->nextPtr = NULL;
+        new_node->next = NULL;
         
         if (q->size == 0) {
-            q->headPtr = new_node;
+            q->head = new_node;
         } else {
-            q->tailPtr->nextPtr = new_node;
+            q->tail->next = new_node;
         }
         
-        q->tailPtr = new_node;
+        q->tail = new_node;
         q->size++;
     }
 }
@@ -31,9 +31,22 @@ int dequeue_struct(Queue *q, int *order_number, int *qty) {
         return 0;
     }
     
-    NodePtr t = q->headPtr;
+    order* t = q->head;
     *order_number = t->order_number;
     *qty = t->q;
+    
+    q->head = t->next;
+    
+    if (q->size == 1) {
+        q->tail = NULL;
+    }
+    
+    q->size--;
+    free(t);
+    return 1;
+}
+
+#endif
     
     q->headPtr = t->nextPtr;
     
