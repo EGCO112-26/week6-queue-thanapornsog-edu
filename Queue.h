@@ -47,6 +47,19 @@ int dequeue_struct(Queue *q, int *order_number, int *qty) {
 }
 
 #endif
+    
+    q->headPtr = t->nextPtr;
+    
+    if (q->size == 1) {
+        q->tailPtr = NULL;
+    }
+    
+    q->size--;
+    free(t);
+    return 1;
+}
+
+#endif
         // 2. ถ้าเหลือ 1 ตัวแล้วเอาออก (size==1) ต้องเคลียร์ tail
         if(q->size == 1)
             q->tailPtr = NULL;
