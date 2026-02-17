@@ -6,8 +6,8 @@
 
 int main(int argc, char **argv) {
     Queue q;
-    q.headPtr = NULL;
-    q.tailPtr = NULL;
+    q.head = NULL;
+    q.tail = NULL;
     q.size = 0;
 
     int i;
@@ -22,18 +22,62 @@ int main(int argc, char **argv) {
                 
                 int price = 0;
                 if (order_num == 1) {
-                    printf("Ramen\n");
-                    price = 100 * qty;
+                    printf("Zinger Burger\n");
+                    price = 89 * qty;
                 } else if (order_num == 2) {
-                    printf("Somtum\n"); 
-                    price = 60 * qty;
+                    printf("Fried Chicken\n"); 
+                    price = 45 * qty;
                 } else if (order_num == 3) {
-                    printf("Fried Chicken\n");
-                    price = 50 * qty;
+                    printf("French Fries\n");
+                    price = 55 * qty;
                 } else {
                     printf("Unknown item\n");
                     price = 0;
                 }
+
+                printf("You have to pay %d\n", price);
+                
+                int cash = 0;
+                printf(":Cash:");
+                scanf("%d", &cash);
+                
+                while (cash < price) {
+                    printf("Cash:");
+                    scanf("%d", &cash);
+                }
+                
+                printf("Thank you\n");
+                
+                if (cash > price) {
+                    printf("Change is:%d\n", cash - price);
+                }
+                
+            } else {
+                printf("Empty queue\n");
+            }
+        } else {
+            if (i + 1 < argc) {
+                int order_num = atoi(argv[i]);
+                int qty = atoi(argv[i+1]);
+                
+                printf("My order is %d\n", order_num);
+                enqueue_struct(&q, order_num, qty);
+                
+                i++; 
+            }
+        }
+    }
+
+    printf("=========================================\n");
+    printf("There are %d ppl left in the queue\n", q.size);
+
+    int temp_order, temp_qty;
+    while (q.size > 0) {
+        dequeue_struct(&q, &temp_order, &temp_qty);
+    }
+
+    return 0;
+}
 
                 printf("You have to pay %d\n", price);
                 
